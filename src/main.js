@@ -2,6 +2,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+// 导入 axios
+import axios from 'axios'
+
 // 导入 路由
 // import router from './router/index.js'
 // 1. router/index.js  省略  router  默认访问index.js文件
@@ -12,6 +15,9 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 // 使用饿了么UI
 Vue.use(ElementUI)
+
+// 挂载 $http 对象就是axios
+Vue.prototype.$http = axios
 
 // 配置vue框架的日志级别  productionTip
 // fasle 不是生产环境级别日志，开发环境日志，日志详细
