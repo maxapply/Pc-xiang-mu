@@ -5,11 +5,11 @@
     <el-card class="my-card">
       <img src="../../assets/logo_index.png" alt="">
       <!-- 表单 -->
-      <el-form :model="loginForm">
-        <el-form-item>
+      <el-form :model="loginForm" :rules="loginRules" status-icon>
+        <el-form-item prop="mobile">
           <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="code">
           <el-input v-model="loginForm.code" placeholder="请输入验证码" style="width:240px;margin-right:8px"></el-input>
           <el-button>发送验证码</el-button>
         </el-form-item>
@@ -29,11 +29,38 @@
 export default {
   name: 'app-login',
   data () {
+    // 自定义校验手机号的函数
+    const checkMobile = (rule, value, callback) => {
+      // 进行校验 （1开头，第二位 3-9 数字，其余剩下9位数字）
+      if (!/^1[3-9]\d{9}$/.test(value)) {
+        // 校验失败
+        callback(new Error('手机号格式错误'))
+      } else {
+        // 校验成功
+        callback()
+      }
+    }
     return {
       // 表单对应的数据对象
       loginForm: {
         mobile: '',
         code: ''
+      },
+      // 表单对应的校验规则
+      loginRules: {
+        mobile: [
+          // required 是否必填
+          // message 错误提示
+          // trigger 触发校验时机
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          // 手机号格式校验没有提供  需要实现自定义校验
+          { validator: checkMobile, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          // len 输入内容必须是 6位  min max 指定字符串的范围
+          { len: 6, message: '验证码6个字符', trigger: 'blur' }
+        ]
       }
     }
   }
