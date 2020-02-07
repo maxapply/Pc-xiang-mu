@@ -8,12 +8,19 @@ import Vue from 'vue'
 // 疑问：index.js index.vue index.json  优先级和我书写的顺序一致
 import Login from '@/views/login'
 import Home from '@/views/home'
+import Welcome from '@/views/welcome'
 Vue.use(VueRouter)
 // 初始化
 const router = new VueRouter({
   routes: [
     { path: '/login', component: Login },
-    { path: '/', component: Home }
+    {
+      path: '/',
+      component: Home,
+      children: [
+        { path: '/', component: Welcome }
+      ]
+    }
   ]
 })
 // 导出
