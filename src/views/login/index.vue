@@ -71,6 +71,22 @@ export default {
         // valid 值 true 校验成功
         if (valid) {
           // TODO 进行登录
+          // 调用登录接口
+          // 请求方式 post
+          // 请求地址 http://ttapi.research.itcast.cn/mp/v1_0/authorizations
+          // 请求参数 请求体 {mobile,code}
+          // 响应内容 用户相关信息
+          this.$http.post(
+            'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+            this.loginForm
+          ).then(res => {
+            // 响应报文对象（响应状态行，响应头，响应主体）
+            // 粗暴跳转到首页即可
+            this.$router.push('/')
+          }).catch(() => {
+            // 提示  手机号或验证码错误
+            this.$message.error('手机号或验证码错误')
+          })
         }
       })
     }
