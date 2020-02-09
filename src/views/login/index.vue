@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import auth from '@/utils/auth'
 export default {
   name: 'app-login',
   data () {
@@ -80,7 +81,10 @@ export default {
             'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
             this.loginForm
           ).then(res => {
-            // 响应报文对象（响应状态行，响应头，响应主体）
+            // 响应报文对象（响应状态行，响应头，响应主体 res.data）
+            // res.data = {message:'',data:'用户信息'} 比对
+            // 本地存储用户信息 使用auth.js模块中的setUser函数
+            auth.setUser(res.data.data) // 这才是用户信息{token,id,name,photo}
             // 粗暴跳转到首页即可
             this.$router.push('/')
           }).catch(() => {

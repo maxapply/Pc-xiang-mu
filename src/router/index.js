@@ -3,6 +3,8 @@
 import VueRouter from 'vue-router'
 // 注册
 import Vue from 'vue'
+// 工具
+import auth from '@/utils/auth'
 // 导入组件
 // 完整路径 @/views/login/index.vue  index.vue是索引文件
 // 疑问：index.js index.vue index.json  优先级和我书写的顺序一致
@@ -26,5 +28,14 @@ const router = new VueRouter({
     { path: '*', component: NotFound }
   ]
 })
+
+// 前置导航守卫
+router.beforeEach((to, from, next) => {
+  // 如果你不是登录页面，而且你没有token，拦截到登录页面
+  if (to.path !== '/login' && !auth.getUser().token) return next('/login')
+  // 其他情况放行
+  next()
+})
+
 // 导出
 export default router
