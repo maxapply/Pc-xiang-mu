@@ -9,7 +9,7 @@ export default {
   created () {
     // 发请求进行测试
     this.$http
-      .get('http://ttapi.research.itcast.cn/mp/v1_0/articles')
+      .get('articles')
       .then(res => {
         console.log(res.data)
       })
