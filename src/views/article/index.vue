@@ -49,11 +49,25 @@
       </el-form>
     </el-card>
     <!-- 筛选结果 -->
+    <my-test>
+      <!-- slot="up" 指定插槽名称 -->
+      <!-- slot-scope 指定插槽作用域数据（绑定在slot标签上的所有数据）名称 -->
+      <!-- data 是变量名，规范变量名：scope 作用域插槽数据 -->
+      <!-- <div slot="up" slot-scope="scope">上面内容 {{scope.age}}{{scope.gender}}{{scope.msg}}</div> -->
+      <!-- v-slot:插槽名称="作用域插槽数据名称"  固定格式 -->
+      <!-- v-slot can only be used on components or <template>. 只能在组件或template中使用 -->
+      <template v-slot:up="scope">
+        上面内容 {{scope.age}}{{scope.gender}}{{scope.msg}}
+      </template>
+      <div slot="down">下面内容</div>
+    </my-test>
   </div>
 </template>
 
 <script>
+import MyTest from '@/components/my-test'
 export default {
+  components: { MyTest },
   // 注意：组件名称不能和原生标签重名
   name: 'app-article',
   data () {
