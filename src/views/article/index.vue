@@ -178,6 +178,7 @@ export default {
       // 如果是get请求，如何传递参数对象 get('地址',{params:'get对象参数'})
       const res = await this.$http.get('articles', { params: this.filterData })
       this.articles = res.data.data.results
+      console.log(this.articles)
       // 设置总条数
       this.total = res.data.data.total_count
     }
