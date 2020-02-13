@@ -75,7 +75,7 @@
         <el-table-column label="操作" width="120px">
           <template slot-scope="scope">
             <el-button @click="toEditArticle(scope.row.id)" plain type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button plain type="danger" icon="el-icon-delete" circle></el-button>
+            <el-button @click="delArticle(scope.row.id)" plain type="danger" icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -128,6 +128,25 @@ export default {
     this.getArticles()
   },
   methods: {
+    // 删除文章
+    delArticle (id) {
+      // 确认框
+      this.$confirm('亲，您是否要删除该篇文章?', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        // 删除请求
+        try {
+          // 13911111111 账号是测试账号，无法删除数据。
+          await this.$http.delete(`articles/${id}`)
+          this.$message.success('删除成功')
+          this.getArticles()
+        } catch (e) {
+          this.$message.error('删除失败')
+        }
+      }).catch(() => {})
+    },
     // 去编辑文章
     toEditArticle (id) {
       this.$router.push(`/publish?id=${id}`)
@@ -178,7 +197,6 @@ export default {
       // 如果是get请求，如何传递参数对象 get('地址',{params:'get对象参数'})
       const res = await this.$http.get('articles', { params: this.filterData })
       this.articles = res.data.data.results
-      console.log(this.articles)
       // 设置总条数
       this.total = res.data.data.total_count
     }
