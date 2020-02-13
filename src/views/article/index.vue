@@ -20,7 +20,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select v-model="filterData.channel_id" placeholder="请选择">
+          <el-select @change="changeChannel" v-model="filterData.channel_id" placeholder="请选择" clearable>
             <el-option
               v-for="item in channelOptions"
               :key="item.id"
@@ -37,10 +37,12 @@
             range-separator="至"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
+            @change="changeDate"
+            value-format="yyyy-MM-dd"
           ></el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">筛选</el-button>
+          <el-button @click="search()" type="primary">筛选</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -111,7 +113,7 @@ export default {
         channel_id: null,
         begin_pubdate: null,
         end_pubdate: null,
-        page: 3,
+        page: 1,
         per_page: 20
       },
       // 频道下拉选项数据
@@ -126,6 +128,32 @@ export default {
     this.getArticles()
   },
   methods: {
+    // 频道改变后
+    changeChannel () {
+      if (this.filterData.channel_id === '') {
+        this.filterData.channel_id = null
+      }
+    },
+    // 筛选逻辑
+    search () {
+      this.filterData.page = 1
+      this.getArticles()
+    },
+    // 选择日期范围
+    changeDate (dateArr) {
+      // 默认参数 dateArr [起始日期,结束日期]  日期默认是Date类型
+      // 但是后台需要的数据 字符串类型  例如：2010-01-01
+      // 赋值之前：对dateArr中的日期进行格式的转换
+      // 文档：可受 value-format 控制，通过这个数据指定组件产生的日期格式 yyyy-MM-dd
+      // 当使用组件的 清空功能，也会触发changeDate函数，改变成null === dateArr
+      if (dateArr) {
+        this.filterData.begin_pubdate = dateArr[0]
+        this.filterData.end_pubdate = dateArr[1]
+      } else {
+        this.filterData.begin_pubdate = null
+        this.filterData.end_pubdate = null
+      }
+    },
     // 分页切
     pager (newPage) {
       // 修改参数
