@@ -49,11 +49,33 @@
       <div slot="header">根据筛选条件共查询到 0 条结果：</div>
       <!-- 表格 -->
       <el-table :data="articles">
-        <el-table-column label="封面"></el-table-column>
+        <el-table-column label="封面">
+          <!-- cover:{type:'',images:[]} 取第一张图片进行预览-->
+          <template slot-scope="scope">
+            <el-image :src="scope.row.cover.images[0]" style="width:150px;height:100px">
+              <div slot="error">
+                <img src="../../assets/error.gif" style="width:150px;height:100px">
+              </div>
+            </el-image>
+          </template>
+        </el-table-column>
         <el-table-column label="标题" prop="title"></el-table-column>
-        <el-table-column label="状态"></el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status===0" type="info">草稿</el-tag>
+            <el-tag v-if="scope.row.status===1">待审核</el-tag>
+            <el-tag v-if="scope.row.status===2" type="success">审核通过</el-tag>
+            <el-tag v-if="scope.row.status===3" type="warning">审核失败</el-tag>
+            <el-tag v-if="scope.row.status===4" type="danger">已删除</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
-        <el-table-column label="操作"></el-table-column>
+        <el-table-column label="操作" width="120px">
+          <template>
+            <el-button plain type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button plain type="danger" icon="el-icon-delete" circle></el-button>
+          </template>
+        </el-table-column>
       </el-table>
       <!-- 分页 -->
       <el-pagination style="margin-top:20px" background layout="prev, pager, next" :total="1000"></el-pagination>
