@@ -40,7 +40,15 @@
     </el-card>
     <!-- 对话框 -->
     <el-dialog title="添加素材" :visible.sync="dialogVisible" width="300px">
-      <span>上传组件</span>
+      <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="handleSuccess"
+      >
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
     </el-dialog>
   </div>
 </template>
@@ -61,13 +69,17 @@ export default {
       // 素材列表
       images: [],
       // 总条数
-      total: 0
+      total: 0,
+      // 预览图片地址
+      imageUrl: null
     }
   },
   created () {
     this.getImages()
   },
   methods: {
+    // 上传成功
+    handleSuccess () {},
     // 打开对话框
     openDialog () {
       // 1. 准备一个对话框
@@ -133,6 +145,7 @@ export default {
 </script>
 
 <style scoped lang='less'>
+// 图片列表
 .img-list {
   margin-bottom: 15px;
   .img-item {
