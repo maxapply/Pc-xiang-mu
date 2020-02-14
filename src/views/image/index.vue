@@ -12,7 +12,7 @@
           <el-radio-button :label="false">全部</el-radio-button>
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button style="float:right" type="success" size="small">添加素材</el-button>
+        <el-button @click="openDialog()" style="float:right" type="success" size="small">添加素材</el-button>
       </div>
       <!-- 列表 -->
       <div class="img-list">
@@ -38,6 +38,10 @@
         @current-change="pager"
       ></el-pagination>
     </el-card>
+    <!-- 对话框 -->
+    <el-dialog title="添加素材" :visible.sync="dialogVisible" width="300px">
+      <span>上传组件</span>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,6 +50,8 @@ export default {
   name: 'app-image',
   data () {
     return {
+      // 控制對話框顯示隱藏
+      dialogVisible: false,
       // 查询条件
       reqParams: {
         collect: false,
@@ -62,6 +68,12 @@ export default {
     this.getImages()
   },
   methods: {
+    // 打开对话框
+    openDialog () {
+      // 1. 准备一个对话框
+      // 2. 再来打开对话框
+      this.dialogVisible = true
+    },
     // 删除函数
     delImage (id) {
       // 确认框
@@ -69,16 +81,18 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(async () => {
-        // 删除请求
-        try {
-          await this.$http.delete(`/user/images/${id}`)
-          this.$message.success('删除成功')
-          this.getImages()
-        } catch (e) {
-          this.$message.error('删除失败')
-        }
-      }).catch(() => {})
+      })
+        .then(async () => {
+          // 删除请求
+          try {
+            await this.$http.delete(`/user/images/${id}`)
+            this.$message.success('删除成功')
+            this.getImages()
+          } catch (e) {
+            this.$message.error('删除失败')
+          }
+        })
+        .catch(() => {})
     },
     // 切换添加收藏与取消收藏
     async toggleStatus (item) {
@@ -87,7 +101,9 @@ export default {
           collect: !item.is_collected
         })
         // res.data.data.collect 就是当前素材状态
-        this.$message.success(res.data.data.collect ? '添加收藏成功' : '取消收藏成功')
+        this.$message.success(
+          res.data.data.collect ? '添加收藏成功' : '取消收藏成功'
+        )
         // item 就是素材数据  is_collected 显示收藏图标的 颜色
         item.is_collected = res.data.data.collect
       } catch (e) {
