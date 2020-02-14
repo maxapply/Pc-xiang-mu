@@ -10,7 +10,9 @@
         </el-form-item>
         <el-form-item label="内容：">富文本</el-form-item>
         <el-form-item label="封面：">封面组件</el-form-item>
-        <el-form-item label="频道：">频道组件</el-form-item>
+        <el-form-item label="频道：">
+          <my-channel v-model="articleForm.channel_id"></my-channel>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary">发布文章</el-button>
           <el-button>存入草稿</el-button>
@@ -27,7 +29,8 @@ export default {
     return {
       // 文章数据
       articleForm: {
-        title: null
+        title: null,
+        channel_id: null
       }
     }
   }

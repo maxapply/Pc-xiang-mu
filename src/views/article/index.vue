@@ -20,15 +20,9 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select @change="changeChannel" v-model="filterData.channel_id" placeholder="请选择" clearable>
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-            <!-- label 选项文字  value 选项的值 当你选择某个选项后，该选项的值提供v-model -->
-          </el-select>
+          <!-- 使用自己封装组件 -->
+          <my-channel v-model="filterData.channel_id"></my-channel>
+          <!-- <my-channel :value="filterData.channel_id" @input="filterData.channel_id=$event"></my-channel> -->
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -124,7 +118,7 @@ export default {
     }
   },
   created () {
-    this.getChannelOptions()
+    // this.getChannelOptions()
     this.getArticles()
   },
   methods: {
@@ -152,11 +146,11 @@ export default {
       this.$router.push(`/publish?id=${id}`)
     },
     // 频道改变后
-    changeChannel () {
-      if (this.filterData.channel_id === '') {
-        this.filterData.channel_id = null
-      }
-    },
+    // changeChannel () {
+    //   if (this.filterData.channel_id === '') {
+    //     this.filterData.channel_id = null
+    //   }
+    // },
     // 筛选逻辑
     search () {
       this.filterData.page = 1
@@ -183,14 +177,14 @@ export default {
       this.filterData.page = newPage
       this.getArticles()
     },
-    // 获取频道数据
-    async getChannelOptions () {
-      // 发请求获取频道数据
-      const res = await this.$http.get('channels')
-      // res = {data:{message:'',data:{channels:[// 频道数组 ]}}}
-      // this.channelOptions = [{id,name}]  数据格式
-      this.channelOptions = res.data.data.channels
-    },
+    // // 获取频道数据
+    // async getChannelOptions () {
+    //   // 发请求获取频道数据
+    //   const res = await this.$http.get('channels')
+    //   // res = {data:{message:'',data:{channels:[// 频道数组 ]}}}
+    //   // this.channelOptions = [{id,name}]  数据格式
+    //   this.channelOptions = res.data.data.channels
+    // },
     // 获取文章数据
     async getArticles () {
       // post('地址','请求体数据')
