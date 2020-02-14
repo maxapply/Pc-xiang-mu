@@ -86,7 +86,16 @@ export default {
   },
   methods: {
     // 上传成功
-    handleSuccess () {},
+    handleSuccess (res) {
+      // 提示 + 预览
+      this.$message.success('上传成功')
+      this.imageUrl = res.data.url
+      // 关闭对话框 + 更新当前列表
+      window.setTimeout(() => {
+        this.dialogVisible = false
+        this.getImages()
+      }, 3000)
+    },
     // 打开对话框
     openDialog () {
       // 1. 准备一个对话框
