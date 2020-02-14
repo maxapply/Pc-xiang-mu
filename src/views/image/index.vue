@@ -101,6 +101,8 @@ export default {
       // 1. 准备一个对话框
       // 2. 再来打开对话框
       this.dialogVisible = true
+      // 清空预览图
+      this.imageUrl = null
     },
     // 删除函数
     delImage (id) {
