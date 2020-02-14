@@ -8,7 +8,7 @@
       <div class="btn-box">
         <!-- collect 值为true收藏的图片  false全部的图片 -->
         <!-- :label 指定值才是布尔类型  -->
-        <el-radio-group v-model="reqParams.collect" size="small">
+        <el-radio-group @change="changeCollect()" v-model="reqParams.collect" size="small">
           <el-radio-button :label="false">全部</el-radio-button>
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
@@ -18,7 +18,7 @@
       <div class="img-list">
         <div class="img-item" v-for="item in images" :key="item.id">
           <img :src="item.url" alt />
-          <div class="option">
+          <div class="option" v-if="!reqParams.collect">
             <span class="el-icon-star-off" :class="{red: item.is_collected}"></span>
             <span class="el-icon-delete"></span>
           </div>
@@ -58,6 +58,11 @@ export default {
     this.getImages()
   },
   methods: {
+    // 切换全部与收藏
+    changeCollect () {
+      this.reqParams.page = 1
+      this.getImages()
+    },
     // 切换分页
     pager (newPage) {
       this.reqParams.page = newPage
