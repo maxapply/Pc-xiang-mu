@@ -11,7 +11,17 @@
         <el-form-item label="内容：">
           <quill-editor v-model="articleForm.content" :options="editorOption"></quill-editor>
         </el-form-item>
-        <el-form-item label="封面：">封面组件</el-form-item>
+        <el-form-item label="封面：">
+          <el-radio-group v-model="articleForm.cover.type">
+            <el-radio :label="1">单图</el-radio>
+            <el-radio :label="3">三图</el-radio>
+            <el-radio :label="0">无图</el-radio>
+            <el-radio :label="-1">自动</el-radio>
+          </el-radio-group>
+          <div>
+            <!-- 组件位置 -->
+          </div>
+        </el-form-item>
         <el-form-item label="频道：">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
@@ -40,7 +50,13 @@ export default {
       articleForm: {
         title: null,
         channel_id: null,
-        content: null
+        content: null,
+        cover: {
+          // 封面类型 -1:自动，0-无图，1-1张，3-3张
+          type: 1,
+          // 放图片地址
+          images: []
+        }
       },
       // 富文本配置对象
       editorOption: {
