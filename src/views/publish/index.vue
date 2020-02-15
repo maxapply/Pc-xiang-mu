@@ -19,14 +19,20 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <!-- 测试组件 -->
+    <!-- :value="count" @input="count=$event"  就是v-model的语法糖底层 -->
+    <my-increment v-model="count"></my-increment>
   </div>
 </template>
 
 <script>
+import MyIncrement from '@/components/my-increment'
 export default {
+  components: { MyIncrement },
   name: 'app-publish',
   data () {
     return {
+      count: 10,
       // 文章数据
       articleForm: {
         title: null,
