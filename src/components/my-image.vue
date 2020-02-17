@@ -8,19 +8,29 @@
     <el-dialog :visible.sync="dialogVisible" width="750px">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="素材库" name="list">
-          <!-- 按钮 -->
-          <el-radio-group v-model="reqParams.collect" size="small">
-            <el-radio-button :label="false">全部</el-radio-button>
-            <el-radio-button :label="true">收藏</el-radio-button>
-          </el-radio-group>
-          <!-- 列表 -->
-          <div class="img-list">
-            <div class="img-item" v-for="i in 8" :key="i">
-              <img src="../assets/avatar.jpg" alt />
+          <div v-loading="loading">
+            <!-- 按钮 -->
+            <el-radio-group @change="changeCollect" v-model="reqParams.collect" size="small">
+              <el-radio-button :label="false">全部</el-radio-button>
+              <el-radio-button :label="true">收藏</el-radio-button>
+            </el-radio-group>
+            <!-- 列表 -->
+            <div class="img-list">
+              <div class="img-item" v-for="item in images" :key="item.id">
+                <img :src="item.url" alt />
+              </div>
             </div>
+            <!-- 分页 -->
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              hide-on-single-page
+              @current-change="pager"
+              :current-page="reqParams.page"
+              :page-size="reqParams.per_page"
+              :total="total"
+            ></el-pagination>
           </div>
-          <!-- 分页 -->
-          <el-pagination background layout="prev, pager, next" :total="1000"></el-pagination>
         </el-tab-pane>
         <el-tab-pane label="上传图片" name="upload">2</el-tab-pane>
       </el-tabs>
@@ -43,6 +53,12 @@ export default {
         page: 1,
         per_page: 8
       },
+      // 素材列表
+      images: [],
+      // 素材总条数
+      total: 0,
+      // 加载中
+      loading: false,
       dialogVisible: false,
       activeName: 'list'
     }
@@ -50,6 +66,34 @@ export default {
   methods: {
     openDialog () {
       this.dialogVisible = true
+      // 打开对话框获取素材列表数据
+      // 原因：数据会有变化，用户不用封面
+      this.getImages()
+    },
+    // 切换全部与收藏
+    changeCollect () {
+      this.reqParams.page = 1
+      this.getImages()
+    },
+    // 分页函数
+    pager (newPage) {
+      this.reqParams.page = newPage
+      this.getImages()
+    },
+    // 获取图片素材
+    async getImages () {
+      // 开始加载
+      this.loading = true
+      // 请求获取数据
+      const res = await this.$http.get('user/images', {
+        params: this.reqParams
+      })
+      // 加载完成
+      this.loading = false
+      // 列表数据
+      this.images = res.data.data.results
+      // 总条数
+      this.total = res.data.data.total_count
     }
   }
 }
