@@ -109,10 +109,26 @@ export default {
     border: 1px dashed #ddd;
     display: inline-block;
     margin-right: 20px;
+    position: relative;
     img {
       width: 100%;
       height: 100%;
       display: block;
+    }
+    &.selected::after{
+      // .img-item 的后伪元素
+      // &符号 less语法，连接符，连接 上一级选择和当前的选择器。
+      // 此时不加&：.img-item ::after{}  解析后：后代选择器
+      // 加上&符后：.img-item::after{}   解析后：交集选择器
+      // .img-item.selected::after{} 满足这个选择器样式生效
+      // 当你想选中效果：给.img-item加上selected类即可。
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.3) url(../assets/selected.png) no-repeat center/ 50px auto;
     }
   }
 }
