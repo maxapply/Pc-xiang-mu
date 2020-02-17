@@ -2,7 +2,7 @@
   <div class="my-image">
     <!-- 图片按钮 -->
     <div class="img_btn" @click="openDialog()">
-      <img :src="imageBtnUrl" alt />
+      <img :src="value||imageBtnUrl" alt />
     </div>
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialogVisible" width="750px">
@@ -63,8 +63,11 @@
 
 <script>
 import auth from '@/utils/auth'
+// 主动导入，打包这张图片到服务器，defaultImage就是图片数据
+import defaultImage from '@/assets/default.png'
 export default {
   name: 'my-image',
+  props: ['value'],
   data () {
     return {
       // 获取素材列表参数对象
@@ -92,7 +95,7 @@ export default {
       // 上传的图片
       uploadImageUrl: null,
       // 图片按钮 图片地址
-      imageBtnUrl: '../assets/default.png'
+      imageBtnUrl: defaultImage
     }
   },
   methods: {
@@ -104,13 +107,17 @@ export default {
         // 校验是否选中图片
         if (!this.selectedImageUrl) return this.$message.warning('请选中一张素材图片')
         // 把选中的图片放到图片按钮位置
-        this.imageBtnUrl = this.selectedImageUrl
+        // this.imageBtnUrl = this.selectedImageUrl
+        // 提交父组件
+        this.$emit('input', this.selectedImageUrl)
       } else {
         // 上传图片
         // 校验是否上传图片
         if (!this.uploadImageUrl) return this.$message.warning('请上传一张素材图片')
         // 把上传的图片放到图片按钮位置
-        this.imageBtnUrl = this.uploadImageUrl
+        // this.imageBtnUrl = this.uploadImageUrl
+        // 提交父组件
+        this.$emit('input', this.uploadImageUrl)
       }
       // 关闭对话框
       this.dialogVisible = false
