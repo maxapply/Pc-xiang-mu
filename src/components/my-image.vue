@@ -16,7 +16,13 @@
             </el-radio-group>
             <!-- 列表 -->
             <div class="img-list">
-              <div class="img-item" v-for="item in images" :key="item.id">
+              <div
+                @click="selectedImage(item.url)"
+                :class="{selected:selectedImageUrl===item.url}"
+                class="img-item"
+                v-for="item in images"
+                :key="item.id"
+              >
                 <img :src="item.url" alt />
               </div>
             </div>
@@ -59,11 +65,20 @@ export default {
       total: 0,
       // 加载中
       loading: false,
+      // 控制对话框显示隐藏
       dialogVisible: false,
-      activeName: 'list'
+      // 激活tab的名称
+      activeName: 'list',
+      // 当前选中的素材图片地址
+      selectedImageUrl: null
     }
   },
   methods: {
+    // 选中图片
+    selectedImage (url) {
+      this.selectedImageUrl = url
+    },
+    // 打开对话框
     openDialog () {
       this.dialogVisible = true
       // 打开对话框获取素材列表数据
@@ -115,7 +130,7 @@ export default {
       height: 100%;
       display: block;
     }
-    &.selected::after{
+    &.selected::after {
       // .img-item 的后伪元素
       // &符号 less语法，连接符，连接 上一级选择和当前的选择器。
       // 此时不加&：.img-item ::after{}  解析后：后代选择器
@@ -128,7 +143,8 @@ export default {
       top: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.3) url(../assets/selected.png) no-repeat center/ 50px auto;
+      background: rgba(0, 0, 0, 0.3) url(../assets/selected.png) no-repeat
+        center/ 50px auto;
     }
   }
 }
