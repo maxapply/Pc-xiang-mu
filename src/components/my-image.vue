@@ -6,7 +6,10 @@
     </div>
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialogVisible" width="750px">
-      <span>TAB组件</span>
+      <el-tabs v-model="activeName" type="card">
+        <el-tab-pane label="素材库" name="list">1</el-tab-pane>
+        <el-tab-pane label="上传图片" name="upload">2</el-tab-pane>
+      </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -20,7 +23,8 @@ export default {
   name: 'my-image',
   data () {
     return {
-      dialogVisible: false
+      dialogVisible: false,
+      activeName: 'list'
     }
   },
   methods: {
