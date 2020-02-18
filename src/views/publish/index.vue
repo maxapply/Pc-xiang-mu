@@ -2,7 +2,7 @@
   <div class='container-publish'>
     <el-card>
       <div slot="header">
-        <my-bread>发布文章</my-bread>
+        <my-bread>{{$route.query.id?'修改':'发布'}}文章</my-bread>
       </div>
       <el-form label-width="120px">
         <el-form-item label="标题：">
@@ -29,7 +29,10 @@
         <el-form-item label="频道：">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="$route.query.id">
+          <el-button type="success">修改文章</el-button>
+        </el-form-item>
+        <el-form-item v-else>
           <el-button @click="submit(false)" type="primary">发布文章</el-button>
           <el-button @click="submit(true)">存入草稿</el-button>
         </el-form-item>
@@ -80,7 +83,44 @@ export default {
       }
     }
   },
+  created () {
+    // 当时修改文章的时候，获取文章信息填充表单
+    if (this.$route.query.id) {
+      this.getArticle()
+    }
+  },
+  watch: {
+    // 监听地址栏ID的变化
+    '$route.query.id': function () {
+      this.toggleFormInfo()
+    }
+  },
   methods: {
+    // 切换表单内容
+    toggleFormInfo () {
+      if (this.$route.query.id) {
+        // 修改
+        this.getArticle()
+      } else {
+        // 发布
+        // 不能这样：this.articleForm = {} 但是模板中 artic来eForm.cover.type 报错
+        // 保证模板依赖的字段都有对应的数据，保证模板编译不错误
+        this.articleForm = {
+          title: null,
+          channel_id: null,
+          content: null,
+          cover: {
+            type: 1,
+            images: []
+          }
+        }
+      }
+    },
+    // 获取文章信息
+    async getArticle () {
+      const res = await this.$http.get(`articles/${this.$route.query.id}`)
+      this.articleForm = res.data.data
+    },
     // 添加文章 draft===false 发布文章  draft===true  存入草稿
     async submit (draft) {
       try {
