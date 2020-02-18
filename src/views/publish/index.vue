@@ -30,7 +30,7 @@
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
         <el-form-item v-if="$route.query.id">
-          <el-button type="success">修改文章</el-button>
+          <el-button @click="update()" type="success">修改文章</el-button>
         </el-form-item>
         <el-form-item v-else>
           <el-button @click="submit(false)" type="primary">发布文章</el-button>
@@ -96,6 +96,20 @@ export default {
     }
   },
   methods: {
+    // 修改函数
+    async update () {
+      try {
+        // 修改只有发布，没有草稿
+        // 路径传参 需要ID
+        // 键值对传参  需要 draft
+        // 请求体传参  articleForm
+        await this.$http.put(`articles/${this.articleForm.id}?draft=false`, this.articleForm)
+        this.$message.success('修改成功')
+        this.$router.push('/article')
+      } catch (e) {
+        this.$message.error('修改失败')
+      }
+    },
     // 切换表单内容
     toggleFormInfo () {
       if (this.$route.query.id) {
